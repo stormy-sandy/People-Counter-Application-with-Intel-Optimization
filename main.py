@@ -96,26 +96,7 @@ def connect_mqtt():
                                                           stats['status'],
                                                           stats['real_time']))'''
 
-def draw_box(frame, result,k):
 
-    curr_count=0
-    for obj in result[0][0]:
-        # Draw bounding box for object when it's probability is more than
-        #  the specified threshold
-        f=str(obj[2]*100)+'%'
-        
-        
-        if obj[2] > prob_threshold:
-            x_min=int(obj[3] * width)
-            y_min=int(obj[4] * height)
-            x_max=int(obj[5] * width)
-            y_max=int(obj[6] * height)
-            # Write out the frame
-            cv2.rectangle(frame, (x_min, y_min),(x_max, y_max), (0, 55, 255), 1)
-            cv2.putText(frame, 'score'+f, (15, 15),cv2.FONT_HERSHEY_COMPLEX, 0.5, (150, 0, 0),1)
-            curr_count=curr_count + 1
-                
-    return frame, curr_count
 def infer_on_stream(args, client,k):
     
     print("Hello")
@@ -189,6 +170,8 @@ def infer_on_stream(args, client,k):
 
             ### TODO: Get the results of the inference request ###
         if plugin.wait(cur_request_id) == 0:
+         
+         
             det_time=time.time() - inf_start
             # Results of the output layer of the network
             result=plugin.get_output(cur_request_id)
@@ -199,7 +182,30 @@ def infer_on_stream(args, client,k):
             
             # TODO: Update the frame to include detected bounding boxes
             
-            frame, curr_count=draw_box(frame, result,k)
+         curr_count=0
+         for obj in result[0][0]:
+         
+         # Draw bounding box for object when it's probability is more than
+         # the specified threshold
+          f=str(obj[2]*100)+'%'
+        
+        
+          if obj[2] > prob_threshold:
+           x_min=int(obj[3] * width)
+           y_min=int(obj[4] * height)
+           x_max=int(obj[5] * width)
+           y_max=int(obj[6] * height)
+           # Write out the frame
+           cv2.rectangle(frame, (x_min, y_min),(x_max, y_max), (0, 55, 255), 1)
+           cv2.putText(frame, 'score'+f, (15, 15),cv2.FONT_HERSHEY_COMPLEX, 0.5, (150, 0, 0),1)
+           curr_count=curr_count + 1         
+            
+            
+            
+            
+            
+            
+            
             inf_time_message = "Inference time: {:.3f}ms"\
                                .format(det_time * 1000)
             cv2.putText(frame, inf_time_message, (15,45),cv2.FONT_HERSHEY_COMPLEX, 0.5, (200, 10, 10), 1)
