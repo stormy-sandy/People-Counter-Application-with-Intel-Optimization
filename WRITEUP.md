@@ -3,6 +3,20 @@
 # Project Write-up
 
 
+Models I tried :
+1. SSD Mobilenet v1<caffemodel>:
+	Issues:
+		* returned bad size bounding box
+		* false detection/ multiple detection of single object in a frame
+2. Squeezenet V2:
+	Issues:  
+		* gave list error after conversion and  didn't show any detection
+3. SSD Inception V2 (tensorflow):
+	Issues:
+		* low detection perdormance
+4. pedestrian-detection-adas-0002 FP16 from openVINO Zoo:
+	Issues: mutliple detection of single object but rare. 
+
 
 
 
