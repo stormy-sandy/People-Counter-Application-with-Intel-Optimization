@@ -120,19 +120,14 @@ def infer_on_stream(args, client,k):
     
     print("Hello")
     # Checks for live feed
-    if args.input == 'CAM':
-        input_stream = 0
+    
 
-    # Checks for input image
-    elif args.input.endswith('.jpg') or args.input.endswith('.bmp') :
-        single_image_mode = True
-        input_stream = args.input
+    
+    
 
-    # Checks for video file
-    else:
-        input_stream = args.input
-        assert os.path.isfile(args.input), "Specified input file doesn't exist"
-
+    # Enter video file
+    input_stream = args.input
+    
     cap = cv2.VideoCapture(input_stream)
 
     if input_stream:
