@@ -29,7 +29,7 @@ Since I've used tensorflow model and for that I've used OpenVINO Toolkit Model O
 
 		1. Go to the <INSTALL_DIR>/deployment_tools/model_optimizer directory
 		2. Use the mo_tf.py script to simply convert a model with the path to the input model .pb file:
-		3. '<python3 mo_tf.py --input_model <INPUT_MODEL>.pb>'
+		3. '''<python3 mo_tf.py --input_model <INPUT_MODEL>.pb>'''
 
 	Two groups of parameters are available to convert your model:
 
@@ -37,7 +37,7 @@ Since I've used tensorflow model and for that I've used OpenVINO Toolkit Model O
 		*TensorFlow-specific parameters: Parameters used to convert only TensorFlow models.
 	
 
-	 _ While other models were converted using model optimizer via code 'python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt' _
+	 While other models were converted using model optimizer via code '''python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt''' 
 
 _Before running the tool with a trained model, make sure the model is converted to the Inference Engine format (*.xml + *.bin) using the Model Optimizer tool._		
 
