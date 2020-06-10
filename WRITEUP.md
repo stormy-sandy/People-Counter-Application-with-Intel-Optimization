@@ -1,5 +1,3 @@
-
-
 # Project Write-up
 
 ## Edge vs Cloud
