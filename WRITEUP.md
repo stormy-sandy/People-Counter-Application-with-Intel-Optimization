@@ -39,7 +39,7 @@ Since I've used tensorflow model and for that I've used OpenVINO Toolkit Model O
 		*TensorFlow-specific parameters: Parameters used to convert only TensorFlow models.
 	
 
-	### _While other models were converted using model optimizer via code 'python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt'.
+	### _While other models were converted using model optimizer via code 'python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt'_
 
 _Before running the tool with a trained model, make sure the model is converted to the Inference Engine format (*.xml + *.bin) using the Model Optimizer tool._		
 
