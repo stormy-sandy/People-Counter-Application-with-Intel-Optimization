@@ -37,7 +37,10 @@ Since I've used tensorflow model and for that I've used OpenVINO Toolkit Model O
 		*TensorFlow-specific parameters: Parameters used to convert only TensorFlow models.
 	
 
-	 While other models were converted using model optimizer via code '''python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt''' 
+	 While other models were converted using model optimizer via code 
+	 '''
+	 python3 mo.py --input_model squeezenet.caffemodel --input_proto squeezenet.prototxt
+	 ''' 
 
 _Before running the tool with a trained model, make sure the model is converted to the Inference Engine format (*.xml + *.bin) using the Model Optimizer tool._		
 
@@ -53,7 +56,12 @@ Note: Model inference comparison and remarks were done on the workspace while fo
 Laptop's Config:
 	Processor(s):1 Processor(s) Installed[ Intel64 Family 6 Model 78 Stepping 3 GenuineIntel ~2000 Mhz]
 	RAM: 8 GB (DDR-4)
+	
+	
 
+1. I started with ssd mobilenet v1 model and ended up with very poor bounding box detection and it's size. :no_mouth: 
+2. ssd mobilenet v2 was also used and it gave flase/missed detection of object. :neutral_face:
+3. SSD inception_V2(tf) model was 97.3 MB pre-conversion and 95.4 MB post-conversion. :expressionless:
 
 | Model Name                          | Inference Time | Throughput | Probability Threshhold | Count(iterations) | Duration   | Latency   | Remarks                                            
 --------------------------------------|----------------|------------|------------------------|-------------------|------------|-----------|----------------------------------------------------
@@ -62,9 +70,6 @@ Laptop's Config:
 | pedestrian-detection-adas-0002 FP16 | 53             | NA         | NA                     | NA                | NA         | NA        | showed detection while there was no object.        
 
 
-1. I started with ssd mobilenet v1 model and ended up with very poor bounding box detection and it's size. :no_mouth: 
-2. ssd mobilenet v2 was also used and it gave flase/missed detection of object. :neutral_face:
-3. SSD inception_V2(tf) model was 97.3 MB pre-conversion and 95.4 MB post-conversion. :expressionless:
 
 4. I chose pedestrian-detection-adas-0002 FP16 from open-model Zoo by Intel and it showed too much missing of boxes. :relieved:
 
