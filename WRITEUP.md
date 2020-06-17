@@ -115,13 +115,21 @@ Output will be in the form:
 
 >For CPU:
 [Step 8/9] Measuring performance (Start inference asyncronously, 60000 ms duration, 4 inference requests in parallel using 4 streams)
+
 Progress: [....................] 100.00% done
+
 [Step 9/9] Dumping statistics report
+
 [ INFO ] Statistics collecting was not requested. No reports are dumped.
+
 Progress: [....................] 100.00% done
+
 Count:      688 iterations
+
 Duration:   60604 ms
+
 Latency:    349.49 ms
+
 Throughput: 11.3 FPS
 
 ## Assess Model Use Cases
