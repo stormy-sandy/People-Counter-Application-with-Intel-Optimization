@@ -29,7 +29,8 @@ To execute the app run the following command after initiating the servers:
 
 Step 1: Generate: Use the Model Extension Generator to generate the Custom Layer Template Files.
 
-		The Model Extension Generator is included in the Intel® Distribution of OpenVINO™ toolkit installation and is run using the command (here with the "--help" option):
+The Model Extension Generator is included in the Intel® Distribution of OpenVINO™ toolkit installation and is run using the command (here with the "--help" option):
+
 		'python3 <INSTALL_DIR>/deployment_tools/tools/extension_generator/extgen.py new --mo-tf-ext'
 
 Step 2: Edit: Edit the Custom Layer Template Files as necessary to create the specialized Custom Layer Extension Source Code.
