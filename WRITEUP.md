@@ -42,7 +42,7 @@ Step 3: Specify: Specify the custom layer extension locations to be used by the 
 1. Register those layers as extensions to the Model Optimizer. In this case, the Model Optimizer generates a valid and optimized Intermediate Representation.
 2. If you have sub-graphs that should not be expressed with the analogous sub-graph in the Intermediate Representation, but another sub-graph should appear in the model, the Model Optimizer provides such an option. This feature is helpful for many TensorFlow models. To read more, see [Sub-graph Replacement in the Model Optimizer](https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_customize_model_optimizer_Subgraph_Replacement_Model_Optimizer.html).
 
-The model I chose for the app was in (supported Frozen Topologies from TensorFlow Object Detection Models Zoo)[https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_convert_model_Convert_Model_From_TensorFlow.html#supported_tensorflow_layers] i.e. Supported Topologies,
+The model I chose for the app was in [supported Frozen Topologies from TensorFlow Object Detection Models Zoo](https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_convert_model_Convert_Model_From_TensorFlow.html#supported_tensorflow_layers) i.e. Supported Topologies,
 so there were no unsupported custom layers in model and model optimizer optimized the model without producing any error.
 
 ***
@@ -58,9 +58,9 @@ To configure a framework, go to the <INSTALL_DIR>/deployment_tools/model_optimiz
 
 ### Loading Non-Frozen Models to the Model Optimizer
 
->To convert SSD inception V2 coco(tf) model first download it and extract from (link)[http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz]
+>To convert SSD inception V2 coco(tf) model first download it and extract from [link](http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz)
 
-To convert go to you model directory and execute the following code:
+To convert go to the directory where you have previously exctracted model into and execute the following code:
 
 ```
 python <INSTALL_DIR>/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config <INSTALL_DIR>/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
