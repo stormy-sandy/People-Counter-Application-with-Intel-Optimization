@@ -58,54 +58,7 @@ To configure a framework, go to the <INSTALL_DIR>/deployment_tools/model_optimiz
 
 ### Loading Non-Frozen Models to the Model Optimizer
 
-There are three ways to store non-frozen TensorFlow models and load them to the Model Optimizer:
-
-1. Checkpoint:
-
-* In this case, a model consists of two files:
-
-..1. inference_graph.pb or inference_graph.pbtxt
-..2. checkpoint_file.ckpt
-..3. If you do not have an inference graph file, refer to Freezing Custom Models in Python.
-
-* To convert such TensorFlow model:
-
-..1. Go to the <INSTALL_DIR>/deployment_tools/model_optimizer directory
-..2. Run the mo_tf.py script with the path to the checkpoint file to convert a model:
-    If input model is in .pb format:
-		'python3 mo_tf.py --input_model <INFERENCE_GRAPH>.pb --input_checkpoint <INPUT_CHECKPOINT>'
-	If input model is in .pbtxt format:
-		'python3 mo_tf.py --input_model <INFERENCE_GRAPH>.pbtxt --input_checkpoint <INPUT_CHECKPOINT> --input_model_is_text'
-
-2. MetaGraph:
-
-In this case, a model consists of three or four files stored in the same directory:
-
-	 * model_name.meta
-	 * model_name.index
-	 * model_name.data-00000-of-00001 (digit part may vary)
-	 * checkpoint (optional)
-* To convert such TensorFlow model:
-
-⋅⋅1. Go to the '<INSTALL_DIR>/deployment_tools/model_optimizer' directory
-Run the 'mo_tf.py' script with a path to the MetaGraph .meta file to convert a model:
-
-	* 'python3 mo_tf.py --input_meta_graph <INPUT_META_GRAPH>.meta'
-
-3. SavedModel:
-
-In this case, a model consists of a special directory with a .pb file and several subfolders: variables, assets, and assets.extra. For more information about the SavedModel directory, refer to the README file in the TensorFlow repository.
-
-To convert such TensorFlow model:
-
-Go to the <INSTALL_DIR>/deployment_tools/model_optimizer directory
-⋅⋅1. Run the 'mo_tf.py' script with a path to the SavedModel directory to convert a model:
-⋅⋅2. 'python3 mo_tf.py --saved_model_dir <SAVED_MODEL_DIRECTORY>'
-
-
-
-
->To convert SSD inception V3(tf) model first download it and extract from (link)[http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz]
+>To convert SSD inception V2 coco(tf) model first download it and extract from (link)[http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz]
 
 To convert go to you model directory and execute the following code:
 
@@ -146,11 +99,14 @@ To check benchmark via OpenVINO:
 
 >NOTE: Before running the tool with a trained model, make sure the model is converted to the Inference Engine format (*.xml +*.bin) using the Model Optimizer tool.
 
-Run the tool with specifying the <INSTALL_DIR>/deployment_tools/demo/car.png file as an input image(can use any image of car), the IR of the ssd_inception_v2_coco model and a device to perform inference on. The following commands demonstrate running the Benchmark Tool in the asynchronous mode on CPU and FPGA devices:
+Run the tool with specifying the <INSTALL_DIR>/deployment_tools/demo/car.png file as an input image(can use any image of car), the IR of the ssd_inception_v2_coco model and a device to perform inference on. The following commands demonstrate running the Benchmark Tool in the asynchronous mode on CPU:
+
+Go to <INSTALL_DIR>/deployment_tools/benchmark_tools/ directory then execute folowing command if:
 On CPU:
 '''
-python3 benchmark_app.py -m <IR_dir>/ssd_inception_v2_coco.xml -d CPU -api async -i <INSTALL_DIR>/deployment_tools/demo/car.png --progress true -b 1
+python3 benchmark_app.py -m <IR_dir>/frozen_inference_graph.xml -d CPU -api async -i <INSTALL_DIR>/deployment_tools/demo/car.png --progress true -b 1
 '''
+
 >Note: Make sure that benchmark app runs on your device and all necessary files are installed beforehand.
 
 The application outputs number of executed iterations, total duration of execution, latency and throughput. Additionally, if you set the -pc parameter, the application outputs performance counters. If you set '-exec_graph_path', the application reports executable graph information serialized.
