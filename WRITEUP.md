@@ -64,14 +64,14 @@ There are three ways to store non-frozen TensorFlow models and load them to the 
 
 * In this case, a model consists of two files:
 
-⋅⋅1. inference_graph.pb or inference_graph.pbtxt
-⋅⋅2. checkpoint_file.ckpt
-⋅⋅3. If you do not have an inference graph file, refer to Freezing Custom Models in Python.
+..1. inference_graph.pb or inference_graph.pbtxt
+..2. checkpoint_file.ckpt
+..3. If you do not have an inference graph file, refer to Freezing Custom Models in Python.
 
 * To convert such TensorFlow model:
 
-⋅⋅1. Go to the <INSTALL_DIR>/deployment_tools/model_optimizer directory
-⋅⋅2. Run the mo_tf.py script with the path to the checkpoint file to convert a model:
+..1. Go to the <INSTALL_DIR>/deployment_tools/model_optimizer directory
+..2. Run the mo_tf.py script with the path to the checkpoint file to convert a model:
     If input model is in .pb format:
 		'python3 mo_tf.py --input_model <INFERENCE_GRAPH>.pb --input_checkpoint <INPUT_CHECKPOINT>'
 	If input model is in .pbtxt format:
