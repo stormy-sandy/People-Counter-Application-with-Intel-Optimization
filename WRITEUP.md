@@ -4,6 +4,7 @@
 To execute the app run the following command after initiating the servers:
 
 'python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m ssd_inception_v2_coco_2018_01_28/frozen_inference_graph.xml  -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.85  | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm'
+Logic for statistics:
 
 
 
@@ -26,6 +27,11 @@ To execute the app run the following command after initiating the servers:
 ***
 
 ## Custom Layers
+
+Potential Reasons to handle Custom layers are:
+1. Custom layers are layers that are not included in the list of known layers. If our topology contains any layers that are not in the list of known layers, the Model Optimizer classifies them as custom.
+2. Model Optimizer searches for each layer of the input model in the list of known layers before building the model's internal representation, optimizing the model, and producing the Intermediate Representation.
+3. To let optimizer handle custom layers accordingly we need to check for supported and unsupported layers beforehand.
 
 Step 1: Generate: Use the Model Extension Generator to generate the Custom Layer Template Files.
 
