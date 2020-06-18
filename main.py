@@ -149,7 +149,7 @@ def infer_on_stream(args, client):
             # TODO: Update the frame to include detected bounding boxes
             
             
-            flag=0
+            
             cur_count=0
             for ob in result[0][0]:
                 # Draw bounding box for object when it's probability is more than
@@ -174,17 +174,17 @@ def infer_on_stream(args, client):
             
             # When new person enters the video
             duration=0
-            flag+=1
-            if cur_count > last_count:
-                start_time=time.time()
-                if flag%2==0:
-                    total_count=total_count + (cur_count - last_count)
+            
+            if cur_count > last_count:            #this will check if one or more people entered into the frame 
+                start_time=time.time()            # initiates time counter
+                
+                total_count=total_count + (cur_count - last_count)   #updates total count accordingly
                     
                 client.publish("person", json.dumps({"total": total_count}))
 
             # Person duration in the video is calculated
-            if cur_count < last_count:
-                duration=int(time.time() - start_time)
+            if cur_count < last_count:           #it checks if one or more person leaves the frame 
+                duration=int(time.time() - start_time)  #calculates total duration
                 # Publish messages to the MQTT server
                 ### TODO: Calculate and send relevant information on ###
                 client.publish("person/duration",json.dumps({"duration": duration}))
