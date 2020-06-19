@@ -142,7 +142,7 @@ def infer_on_stream(args, client):
             # Results of the output layer of the network
             result=plugin.get_output(cur_id)
             
-            #performace checking
+            
 
 
             
@@ -150,6 +150,7 @@ def infer_on_stream(args, client):
             
             
             
+            flag_thresh=15
             cur_count=0
             for ob in result[0][0]:
                 # Draw bounding box for object when it's probability is more than
@@ -164,6 +165,10 @@ def infer_on_stream(args, client):
                     cv2.putText(frame, 'score'+f, (15, 15),cv2.FONT_HERSHEY_DUPLEX, 0.5, (150, 0, 0),1)
                     cv2.rectangle(frame, box_side_1,box_side_2, (0, 55, 255), 1)
                     cur_count=cur_count + 1
+                else:
+                    flag_thresh-=1
+                
+                
             
             
             
@@ -175,16 +180,18 @@ def infer_on_stream(args, client):
             # When new person enters the video
             duration=0
             
-            if cur_count > last_count:            #this will check if one or more people entered into the frame 
-                start_time=time.time()            # initiates time counter
+            
                 
-                total_count=total_count + (cur_count - last_count)   #updates total count accordingly
+            if cur_count > last_count:
+                start_time=time.time() 
+                if flag_thresh==0:
+                    total_count=total_count + (cur_count - last_count)
                     
                 client.publish("person", json.dumps({"total": total_count}))
 
             # Person duration in the video is calculated
-            if cur_count < last_count:           #it checks if one or more person leaves the frame 
-                duration=int(time.time() - start_time)  #calculates total duration
+            if cur_count < last_count:
+                duration=int(time.time() - start_time)
                 # Publish messages to the MQTT server
                 ### TODO: Calculate and send relevant information on ###
                 client.publish("person/duration",json.dumps({"duration": duration}))
@@ -237,6 +244,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-# python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m intel/pedestrian-detection-adas-0002/FP16/pedestrian-detection-adas-0002.xml  -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.85  | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+# python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m ssd_inception_v2_coco_2018_01_28/frozen_inference_graph.xml  -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.85  | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 
 #
