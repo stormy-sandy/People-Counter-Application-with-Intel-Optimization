@@ -150,7 +150,7 @@ def infer_on_stream(args, client):
             
             
             
-            flag_thresh=15
+            flag_thresh=15   #to handle false positives
             cur_count=0
             for ob in result[0][0]:
                 # Draw bounding box for object when it's probability is more than
@@ -184,7 +184,7 @@ def infer_on_stream(args, client):
                 
             if cur_count > last_count:
                 start_time=time.time() 
-                if flag_thresh==0:
+                if flag_thresh==0:  
                     total_count=total_count + (cur_count - last_count)
                     
                 client.publish("person", json.dumps({"total": total_count}))
