@@ -150,7 +150,7 @@ def infer_on_stream(args, client):
             
             
             
-            flag_thresh=15   #to handle false positives
+            flag_thresh=15
             cur_count=0
             for ob in result[0][0]:
                 # Draw bounding box for object when it's probability is more than
@@ -184,13 +184,13 @@ def infer_on_stream(args, client):
                 
             if cur_count > last_count:
                 start_time=time.time() 
-                if flag_thresh==0:  
+                if flag_thresh==0:
                     total_count=total_count + (cur_count - last_count)
                     
                 client.publish("person", json.dumps({"total": total_count}))
 
             # Person duration in the video is calculated
-            if cur_count < last_count:
+            if (cur_count < last_count) and int(time.time() - start_time) >=1:
                 duration=int(time.time() - start_time)
                 # Publish messages to the MQTT server
                 ### TODO: Calculate and send relevant information on ###
@@ -244,6 +244,11 @@ def main():
 if __name__ == '__main__':
     main()
 
-# python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m ssd_inception_v2_coco_2018_01_28/frozen_inference_graph.xml  -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.85  | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
+# python main.py -i resources/Pedestrian_Detect_2_1_1.mp4 -m frozen_inference_graph.xml  -l /opt/intel/openvino/deployment_tools/inference_engine/lib/intel64/libcpu_extension_sse4.so -d CPU -pt 0.85  | ffmpeg -v warning -f rawvideo -pixel_format bgr24 -video_size 768x432 -framerate 24 -i - http://0.0.0.0:3004/fac.ffm
 
-#
+#/opt/Intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/frozen_inference_graph.pb --transformations_config faster_rcnn_support.json --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/pipeline.config
+
+
+#python /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json
+
+#python benchmark_app.py -m /home/workspace/faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/frozen_inference_graph.pb -d CPU -api async -i /home/workspace/car.png  -b 1
