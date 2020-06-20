@@ -48,7 +48,7 @@ Step 3: Specify: Specify the custom layer extension locations to be used by the 
 1. Register those layers as extensions to the Model Optimizer. In this case, the Model Optimizer generates a valid and optimized Intermediate Representation.
 2. If you have sub-graphs that should not be expressed with the analogous sub-graph in the Intermediate Representation, but another sub-graph should appear in the model, the Model Optimizer provides such an option. This feature is helpful for many TensorFlow models. To read more, see [Sub-graph Replacement in the Model Optimizer](https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_customize_model_optimizer_Subgraph_Replacement_Model_Optimizer.html).
 
-The model I chose for the app was in [supported Frozen Topologies from TensorFlow Object Detection Models Zoo](https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_convert_model_Convert_Model_From_TensorFlow.html#supported_tensorflow_layers) i.e. Supported Topologies,
+The models I chose for the app was in [supported Frozen Topologies from TensorFlow Object Detection Models Zoo](https://docs.openvinotoolkit.org/latest/_docs_MO_DG_prepare_model_convert_model_Convert_Model_From_TensorFlow.html#supported_tensorflow_layers) i.e. Supported Topologies,
 so there were no unsupported custom layers in model and model optimizer optimized the model without producing any error.
 
 ***
@@ -64,14 +64,40 @@ To configure a framework, go to the <INSTALL_DIR>/deployment_tools/model_optimiz
 
 ### Loading Non-Frozen Models to the Model Optimizer
 
->To convert SSD inception V2 coco(tf) model first download it and extract from [link](http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz)
+1. To convert SSD inception V2 coco(tf) model first download it and extract from [link](http://download.tensorflow.org/models/object_detection/ssd_inception_v2_coco_2018_01_28.tar.gz)
+2. To convert SSD mobilenet V2(Caffe) model first download it and extract from [link](http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz)
+3. To convert faster_rcnn_inception_resnet_v2_atrous_coco model first download it and extract from [link](http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz)
+4. To convert pedestrian-detection-adas-0002 FP16 model first download using following instructions:
+To navigate to the directory containing the Model Downloader:
+```python
+cd <INSTALL_DIR>/openvino/deployment_tools/open_model_zoo/tools/downloader
+```
+Within there, you'll notice a `downloader.py` file, and can use the -h argument with it to see available arguments. For this exercise, `--name` for model name, and `--precisions`, used when only certain precisions are desired, are the important arguments. Note that running `downloader.py` without these will download all available pre-trained models, which will be multiple gigabytes. You can do this on your local machine, if desired, but the workspace will not allow you to store that much information.
 
-To convert go to the directory where you have previously exctracted model into and execute the following code:
+Execute the code to download:
 
+`python downloader.py --name pedestrian-detection-adas-0002 --precisions FP16 `
+
+
+To convert go to the directory where you have previously exctracted model into and execute the following code respectively for each Model:
+
+1. CAFFE Model
 ```
 python <INSTALL_DIR>/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config <INSTALL_DIR>/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
 ```
+2. Tensorflow Model
+```python
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo.py --input_model frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/ssd_v2_support.json
+```
+3. FRCNN resnet v2 Model
 
+```python
+python /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py --input_model faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/frozen_inference_graph.pb --tensorflow_object_detection_api_pipeline_config faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28/pipeline.config --reverse_input_channels --tensorflow_use_custom_operations_config /opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/faster_rcnn_support.json
+```
+4.
+```
+pedestrian-detection-adas-0002 FP16 already come  optimized with .xml and .bin files.
+```
 ***
 
 ## Comparing Model Performance
@@ -87,7 +113,12 @@ Laptop's Config:
 
 | Model Name                          | Inference Time | Throughput | Probability Threshhold | Count(iterations) | Duration   | Latency   | Remarks
 --------------------------------------|----------------|------------|------------------------|-------------------|------------|-----------|----------------------------------------------------
-| SSD inception_V2(tf)                | 156            | 11.35 FPS  | 0.7                    | 688               | 60604 ms   | 349.49 ms
+| SSD inception_V2(tf)                | 156            | 11.35 FPS  | 0.7                    | 688               | 60604 ms   | 349.49 ms| Max FP Cases
+| SSD inception V2(Caffe)  | 40  |44.55 FPS   |0.91   |2680   |60152.39 ms   | 87.62 ms  | Max FP Cases and wrong stats
+|faster_rcnn_inception_resnet_v2_atrous_coco | NA | 0.06 FPS |NA | 8|130688 ms |64880 ms |IndexError: list index out of range
+|pedestrian-detection-adas-0002 FP16|50   |24.74 FPS   |0.85   |  1488  |  60152 ms | 151.04 ms  | Worked Well
+|   |   |   |   |   |   |   |
+
 
 1. I started with ssd mobilenet v1 model and ended up with very poor bounding box detection and it's size. :no_mouth:
 2. SSD inception_V2(tf) model was 97.3 MB pre-conversion and 95.4 MB post-conversion.
