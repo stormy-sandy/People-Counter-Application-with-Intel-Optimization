@@ -122,6 +122,8 @@ Laptop's Config:
 
 1. I started with ssd mobilenet v1 model and ended up with very poor bounding box detection and it's size. :no_mouth:
 2. SSD inception_V2(tf) model was 97.3 MB pre-conversion and 95.4 MB post-conversion.
+3. I then used FRCNN inception v2 which later on gave list index error and while getting frame size.(Pre-conversion 235 MB; Post-conversion 228 MB)
+4. I then used Intel's Pre-trained model pedestrian-detection-adas-0002 FP16 which worked very well
 
 **My method(s) to compare models before and after conversion to Intermediate Representations
 were:**
